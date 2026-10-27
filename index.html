@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Psst… it's your birthday 🎀</title>
+<!-- Fonts are optional: if they fail to load, the fallbacks still look fine. Everything else is inline SVG/CSS, so it works offline. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--blush:#f7dde0;--cream:#fcf6ee;--rose:#d48a96;--cherry:#b3283f;--wine:#6e1f33;--gold:#d9b36f;--ink:#43232b;
+--serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;--hand:"Caveat","Segoe Print","Bradley Hand",cursive}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);background:var(--cream);font-size:19px;line-height:1.5;overflow-x:hidden;min-height:100svh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at 15% 8%,#f7dde0 0,transparent 50%),radial-gradient(circle at 90% 85%,#f6d3d8 0,transparent 45%)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.16;mix-blend-mode:multiply;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--cherry);outline-offset:3px}
+.ic{display:block;height:auto;overflow:visible}
+.bow{display:inline-block;width:1em;height:.6em;color:var(--cherry)}
+.btn{font-family:var(--hand);font-size:1.5rem;font-weight:700;padding:.45em 1.5em;border-radius:99px;color:var(--cream);background:linear-gradient(160deg,#cf4a62,var(--wine));box-shadow:0 8px 18px -8px var(--wine),inset 0 1px 2px rgba(255,255,255,.5);transition:transform .25s}
+.btn:hover{transform:translateY(-3px) rotate(-1deg)}.btn:active{transform:scale(.97)}
+.pearls{height:14px;width:min(240px,70%);margin:.6rem auto;background:radial-gradient(circle at 38% 35%,#fff 0 2px,transparent 3px),radial-gradient(circle,#efe2dc 0 5.6px,#cdb9b1 6.4px,transparent 7px);background-size:14px 14px;background-repeat:repeat-x}
+
+#floaters{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.fl{position:absolute;bottom:-60px;color:var(--rose);opacity:0;animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.5}90%{opacity:.35}100%{transform:translateY(-112vh) rotate(25deg);opacity:0}}
+
+/* GATE */
+#gate{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.5rem;background:linear-gradient(var(--blush),var(--cream));transition:opacity .9s,visibility .9s}
+#gate.gone{opacity:0;visibility:hidden}
+#gate h1{font-weight:600;font-style:italic;font-size:clamp(2rem,9vw,3.2rem);line-height:1.1;color:var(--wine)}
+#gate p{font-family:var(--hand);font-size:1.5rem;margin-bottom:1.1rem}
+.gift{width:190px;margin-bottom:.6rem;animation:bob 4s ease-in-out infinite;overflow:visible}
+@keyframes bob{50%{transform:translateY(-8px) rotate(1.5deg)}}
+.gift .lid{transition:transform .9s cubic-bezier(.5,-.4,.4,1.3);transform-box:fill-box}
+#gate.open .lid{transform:translateY(-70px) rotate(-14deg)}
+.glow{opacity:0;transition:opacity .8s}#gate.open .glow{opacity:1}
+.corner{position:absolute;width:70px;height:42px;color:var(--cherry);opacity:.85}
+.gdeco{position:absolute;display:flex;gap:10px;opacity:.9}
+
+/* MAIN */
+#main{display:none;position:relative;z-index:2;opacity:0;transition:opacity 1s}
+#main.show{display:block}#main.vis{opacity:1}
+section{max-width:980px;margin:0 auto;padding:3.6rem 1.2rem;text-align:center}
+h2{font-weight:600;font-style:italic;font-size:clamp(1.8rem,6vw,2.6rem);color:var(--wine);line-height:1.15;margin-bottom:.3rem}
+.sub{font-family:var(--hand);font-size:1.35rem;margin-bottom:1.8rem;color:var(--cherry)}
+.hand{font-family:var(--hand)}
+.cake{width:min(46vw,190px);cursor:pointer;margin:0 auto;display:block;filter:drop-shadow(0 12px 12px rgba(110,31,51,.2))}
+.flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .5s ease-in-out infinite alternate;transition:opacity .3s}
+.cake.out .flame{opacity:0}
+@keyframes flick{from{transform:scale(1,1) rotate(-4deg)}to{transform:scale(.88,1.12) rotate(4deg)}}
+
+/* cover */
+#hero{padding-top:2.2rem}
+.cover{position:relative;max-width:520px;margin:0 auto;padding:1.4rem 1rem 1.8rem;background:linear-gradient(#fffaf4,var(--cream));border:1px solid var(--rose);outline:1px solid var(--rose);outline-offset:6px;box-shadow:0 24px 40px -22px var(--wine)}
+.issue{display:flex;justify-content:space-between;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--wine);border-bottom:1px solid var(--rose);padding-bottom:.4rem}
+.mast{font-weight:700;font-size:clamp(3.4rem,19vw,6rem);letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;line-height:1;margin:.5rem 0 0;background:linear-gradient(170deg,#d4505f,var(--cherry) 45%,var(--wine));-webkit-background-clip:text;background-clip:text;color:transparent}
+.edition{font-size:.8rem;letter-spacing:.35em;text-transform:uppercase;color:var(--wine);margin-bottom:.6rem}
+.stage{position:relative;padding:.4rem 0}
+.pr{position:absolute}
+.cl{position:absolute;font-family:var(--hand);font-size:1.15rem;line-height:1;color:var(--wine);width:30%;text-align:left}
+.cl b{display:block;font-size:1.5rem;color:var(--cherry)}
+.cover h1{font-weight:600;font-size:clamp(2.4rem,12vw,4.4rem);line-height:.95;color:var(--wine);letter-spacing:-.02em;margin:.6rem 0 .6rem}
+.cover h1 i{display:block;font-weight:500;font-size:.6em}
+.cover h1 span{color:var(--cherry)}
+.tag{font-family:var(--hand);font-size:1.45rem;display:inline-block;background:var(--blush);border:1px dashed var(--cherry);padding:.1em .9em;transform:rotate(-2deg)}
+.barcode{position:absolute;right:12px;bottom:12px;width:54px;height:26px;background:repeating-linear-gradient(90deg,var(--wine) 0 2px,transparent 2px 4px,var(--wine) 4px 5px,transparent 5px 8px);opacity:.7}
+.hint{font-family:var(--hand);font-size:1.1rem;opacity:.7;margin-top:1.1rem}
+
+/* award cards */
+.grid{display:grid;gap:1.1rem;grid-template-columns:1fr}
+@media(min-width:620px){.grid{grid-template-columns:1fr 1fr}.grid .card:last-child:nth-child(odd){grid-column:1/-1;max-width:calc(50% - .55rem);margin:0 auto}}
+.card{perspective:900px;height:212px}
+.card .in{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,1.3,.5,1)}
+.card.flip .in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.1rem;box-shadow:0 14px 24px -14px rgba(110,31,51,.55)}
+.front{background:#fffaf4;border:1px solid var(--gold);outline:1px solid var(--gold);outline-offset:-7px;gap:.25rem;color:var(--wine)}
+.front small{font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--cherry)}
+.front b{font-style:italic;font-size:1.35rem;line-height:1.1;font-weight:600;max-width:15ch}
+.front .ic{width:38px;margin:.1rem 0}
+.front .tap{font-family:var(--hand);font-size:1.05rem;opacity:.65}
+.seal{position:absolute;right:14px;bottom:14px;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e0626f,var(--cherry) 60%,var(--wine));color:var(--cream);display:grid;place-items:center;font-size:.9rem;box-shadow:0 3px 6px rgba(0,0,0,.25)}
+.back{background:linear-gradient(160deg,var(--blush),#f3c8cf);transform:rotateY(180deg);font-style:italic;font-size:1.22rem;line-height:1.28;color:var(--wine);border:1px solid #ecb7c0}
+.back em{display:block;font-family:var(--hand);font-style:normal;font-size:1.05rem;margin-top:.5rem;color:var(--cherry)}
+.card:hover .in{transform:translateY(-4px)}.card.flip:hover .in{transform:rotateY(180deg) translateY(-4px)}
+.card:nth-child(3n+2) .front{background:#fdeef0}.card:nth-child(3n) .front{background:#fff6e2}
+
+/* letter */
+.env{position:relative;width:min(86vw,320px);height:190px;margin:0 auto;background:#e8a9b4;border-radius:6px;box-shadow:0 14px 26px -12px var(--wine);display:block}
+.env::before{content:"";position:absolute;inset:0;border-radius:6px;background:linear-gradient(135deg,transparent 50%,#df97a4 50%) left/50% 100% no-repeat,linear-gradient(225deg,transparent 50%,#df97a4 50%) right/50% 100% no-repeat}
+.flap{position:absolute;left:0;top:0;width:100%;height:60%;background:#d68696;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .7s}
+.env.open .flap{transform:rotateX(180deg);background:#c97889}
+.wax{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e0626f,var(--cherry) 60%,var(--wine));color:var(--cream);display:grid;place-items:center;font-size:1.4rem;transition:opacity .4s;z-index:2;box-shadow:0 3px 6px rgba(0,0,0,.3)}
+.env.open .wax{opacity:0}
+.wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows 1s ease}
+.wrap.open{grid-template-rows:1fr}.wrap>div{overflow:hidden;padding:0 .6rem}
+.journal{position:relative;margin:2rem auto 0;max-width:440px;background:var(--wine);padding:.7rem .7rem .7rem 1.3rem;border-radius:4px 14px 14px 4px;box-shadow:0 20px 32px -16px rgba(110,31,51,.7);transform:rotate(-1deg)}
+.journal::before{content:"";position:absolute;left:5px;top:12px;bottom:12px;width:6px;background:repeating-linear-gradient(var(--gold) 0 10px,transparent 10px 24px);border-radius:3px}
+.paper{position:relative;text-align:left;padding:2.2rem 1.4rem 1.4rem;background:#fffdf7 repeating-linear-gradient(transparent 0 31px,#f1d9dc 31px 32px);border-radius:3px 10px 10px 3px;font-size:1.28rem;line-height:32px}
+.paper p{margin:0 0 32px}.paper .sig{font-family:var(--hand);font-size:1.5rem;color:var(--cherry);margin:0}
+.paper::before{content:"";position:absolute;top:-12px;left:30%;width:90px;height:24px;background:rgba(212,138,150,.55);transform:rotate(-3deg)}
+.flowers{position:absolute;right:6px;top:4px;display:flex;gap:2px}
+
+/* scrapbook */
+.scr{display:grid;grid-template-columns:1fr 1fr;gap:1.8rem 1rem;align-items:start}
+.sc{position:relative;padding:1rem .8rem;text-align:center;transition:transform .35s;transform:rotate(var(--r,0deg))}
+.sc:hover{transform:rotate(0) translateY(-5px) scale(1.03);z-index:3}
+.sc .row{display:flex;justify-content:center;align-items:flex-end;gap:.5rem;margin-bottom:.4rem}
+.cap{font-family:var(--hand);font-size:1.28rem;line-height:1.05;color:var(--wine)}
+.lab{display:inline-block;margin-top:.5rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--cherry);color:var(--cherry);padding:.15em .6em;border-radius:2px;background:#fffaf4}
+.tape{position:absolute;top:-10px;left:50%;width:72px;height:22px;background:rgba(217,179,111,.6);transform:translateX(-50%) rotate(-4deg)}
+.a{grid-column:1/-1;--r:-1.2deg;background:#fffaf4;clip-path:polygon(0 3%,6% 0,14% 3%,23% 0,33% 2%,44% 0,55% 3%,66% 0,77% 2%,88% 0,100% 3%,100% 97%,92% 100%,80% 97%,68% 100%,55% 98%,42% 100%,28% 97%,15% 100%,5% 97%,0 100%);box-shadow:inset 0 0 0 99px #fffaf4}
+.a .row{gap:1.2rem}
+.b{--r:3deg;background:var(--cream);outline:3px dotted var(--rose);outline-offset:-6px;box-shadow:0 10px 20px -12px var(--wine)}
+.c{--r:-3deg;background:#fff;padding:.7rem .7rem 1rem;box-shadow:0 12px 22px -12px var(--wine)}
+.c .frame{background:var(--blush);padding:.8rem 0 .4rem;margin-bottom:.5rem}
+.d{--r:1.5deg;background:#fffefb;font-family:"Courier New",monospace;font-size:.82rem;text-align:left;padding:1.1rem .9rem;box-shadow:0 10px 18px -12px #000;clip-path:polygon(0 0,100% 0,100% 96%,92% 100%,84% 96%,76% 100%,68% 96%,60% 100%,52% 96%,44% 100%,36% 96%,28% 100%,20% 96%,12% 100%,4% 96%,0 100%)}
+.d p{display:flex;justify-content:space-between;border-bottom:1px dashed #bbb;padding:.1rem 0;gap:.4rem}
+.d .cap{text-align:center;margin-top:.5rem}
+.e{--r:-4deg;width:78%;aspect-ratio:1;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 4%,#f9d3d8 5%,#f0a9b5);border:3px solid #fff;box-shadow:0 8px 16px -8px var(--wine);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.4rem}
+.e .cap{font-size:1.1rem}
+.f{grid-column:1/-1;--r:1deg;background:linear-gradient(#fffaf4,#fdeef0);border:1px solid var(--rose);box-shadow:6px 6px 0 var(--blush),12px 12px 0 #f3c8cf}
+.f .row{gap:.8rem}.f .cap{font-size:1.45rem}
+.sticker{position:absolute;width:30px;height:30px;color:var(--rose)}
+@media(min-width:760px){.scr{grid-template-columns:repeat(6,1fr)}.a{grid-column:1/4}.b{grid-column:4/7}.c,.d,.e{grid-column:span 2}.e{width:100%}.f{grid-column:2/6}}
+
+/* kit */
+.bag{position:relative;max-width:680px;margin:0 auto;padding:1.8rem 1rem 1.4rem;border-radius:26px;background:linear-gradient(160deg,#f9d3d9,#f1b8c2);border:2px dashed #fff;outline:3px solid #f1b8c2;outline-offset:3px;box-shadow:0 22px 34px -20px var(--wine)}
+.bag::before{content:"";position:absolute;top:-1px;left:12%;right:12%;height:7px;border-radius:0 0 8px 8px;background:repeating-linear-gradient(90deg,var(--gold) 0 6px,#b98f4d 6px 9px)}
+.bag-in{display:grid;grid-template-columns:1fr 1fr;gap:1rem .6rem;align-items:start}
+@media(min-width:620px){.bag-in{grid-template-columns:repeat(4,1fr)}}
+.gbtn{display:flex;flex-direction:column;align-items:center;gap:.3rem;width:100%;font-family:var(--hand);font-size:1.3rem;color:var(--wine);transition:transform .25s;line-height:1}
+.gbtn .ic{width:52px;transition:transform .3s}
+.gbtn:hover .ic{transform:translateY(-5px) rotate(-6deg)}
+.gbtn[aria-expanded=true]{color:var(--cherry)}
+.note{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s}
+.note.open{grid-template-rows:1fr}.note>div{overflow:hidden}
+.note p{margin-top:.6rem;padding:.8rem .8rem;background:#fffaf4;border-radius:4px;font-style:italic;font-size:1.08rem;line-height:1.25;transform:rotate(-1deg);box-shadow:0 8px 14px -10px #000;text-align:left}
+
+/* final */
+#final .page{max-width:520px;margin:0 auto;padding:2rem 1.2rem;background:#fffaf4;border:1px solid var(--rose);outline:1px solid var(--rose);outline-offset:6px;box-shadow:0 24px 40px -22px var(--wine);position:relative}
+#final p.big{font-style:italic;font-weight:600;font-size:clamp(1.6rem,6vw,2.2rem);color:var(--wine);margin:1rem auto .6rem;line-height:1.2}
+#final p.small{font-family:var(--hand);font-size:1.25rem;max-width:400px;margin:0 auto 1.4rem;opacity:.85;line-height:1.15}
+.ps{font-family:var(--hand);font-size:1.4rem;color:var(--cherry);margin:1.8rem auto 0;max-width:340px;line-height:1.15;transform:rotate(-1.5deg)}
+.conf{position:fixed;z-index:60;pointer-events:none;top:0;left:0;color:var(--rose)}
+footer{height:2rem}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}html{scroll-behavior:auto}#floaters{display:none}}
+</style>
+</head>
+<body>
+
+<!-- Inline illustrations: reused everywhere with <use href="#name">. Nothing external. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="bow" viewBox="0 0 100 60"><path fill="currentColor" d="M50 30C30 0 2 6 6 28c3 20 28 18 44 2zM50 30C70 0 98 6 94 28c-3 20-28 18-44 2zM46 34 33 58l11-4 6 5 2-23zM54 34l13 24-11-4-6 5-2-23z"/><path fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2" d="M48 28C36 12 18 14 14 26"/><ellipse cx="50" cy="31" rx="8" ry="9" fill="currentColor"/><ellipse cx="50" cy="31" rx="8" ry="9" fill="#000" opacity=".18"/></symbol>
+<symbol id="lipstick" viewBox="0 0 60 90"><rect x="19" y="52" width="22" height="34" rx="3" fill="#6e1f33"/><rect x="17" y="44" width="26" height="12" rx="2" fill="#d9b36f"/><path d="M21 44V26l18-9v27z" fill="#b3283f"/><path d="M21 26l18-9v7l-18 9z" fill="#e0626f"/><rect x="22" y="58" width="3" height="24" fill="#fff" opacity=".25"/></symbol>
+<symbol id="gloss" viewBox="0 0 60 90"><rect x="24" y="4" width="12" height="30" rx="4" fill="#6e1f33"/><rect x="18" y="32" width="24" height="54" rx="10" fill="#f9d3d9" stroke="#d48a96"/><rect x="22" y="50" width="16" height="32" rx="7" fill="#e4677c" opacity=".75"/><rect x="23" y="38" width="3" height="40" rx="1.5" fill="#fff" opacity=".7"/></symbol>
+<symbol id="serum" viewBox="0 0 60 90"><rect x="25" y="3" width="10" height="12" rx="4" fill="#6e1f33"/><ellipse cx="30" cy="22" rx="8" ry="10" fill="#d9b36f"/><rect x="22" y="30" width="16" height="9" fill="#d9b36f"/><rect x="13" y="38" width="34" height="48" rx="9" fill="#fdf0f1" stroke="#d48a96"/><rect x="13" y="60" width="34" height="26" rx="9" fill="#f0c28f" opacity=".7"/><rect x="19" y="50" width="22" height="18" rx="2" fill="#fcf6ee"/><path d="M23 56h14M23 61h9" stroke="#b3283f" stroke-width="1.4"/></symbol>
+<symbol id="mirror" viewBox="0 0 60 90"><circle cx="30" cy="52" r="27" fill="#d9b36f"/><circle cx="30" cy="52" r="22" fill="#eadbe6"/><path d="M16 44a16 16 0 0 1 14-12" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><use href="#bow" x="17" y="2" width="26" height="16" style="color:#b3283f"/></symbol>
+<symbol id="perfume" viewBox="0 0 60 90"><rect x="23" y="4" width="14" height="12" rx="3" fill="#d9b36f"/><rect x="27" y="16" width="6" height="9" fill="#6e1f33"/><rect x="11" y="24" width="38" height="62" rx="11" fill="#f9d9de" stroke="#d48a96"/><rect x="17" y="46" width="26" height="22" rx="3" fill="#fcf6ee"/><path d="M25 57q5-7 10 0-5 7-10 0z" fill="#b3283f"/><rect x="16" y="30" width="4" height="48" rx="2" fill="#fff" opacity=".65"/></symbol>
+<symbol id="jar" viewBox="0 0 60 90"><rect x="9" y="30" width="42" height="15" rx="5" fill="#6e1f33"/><rect x="11" y="43" width="38" height="42" rx="10" fill="#fcf6ee" stroke="#d48a96"/><rect x="17" y="56" width="26" height="16" fill="#f7dde0"/><path d="M23 64h14" stroke="#b3283f" stroke-width="1.5"/></symbol>
+<symbol id="palette" viewBox="0 0 60 90"><rect x="3" y="26" width="54" height="52" rx="12" fill="#6e1f33"/><circle cx="19" cy="43" r="9" fill="#f3b3bd"/><circle cx="41" cy="43" r="9" fill="#e4677c"/><circle cx="19" cy="63" r="9" fill="#f7dde0"/><circle cx="41" cy="63" r="9" fill="#b3283f"/><path d="M14 38a6 6 0 0 1 5-3" stroke="#fff" stroke-opacity=".6" stroke-width="2" fill="none"/></symbol>
+<symbol id="flower" viewBox="0 0 40 40"><g fill="#f7dde0" stroke="#d48a96" stroke-width=".8"><ellipse cx="20" cy="10" rx="6" ry="9"/><ellipse cx="20" cy="10" rx="6" ry="9" transform="rotate(72 20 20)"/><ellipse cx="20" cy="10" rx="6" ry="9" transform="rotate(144 20 20)"/><ellipse cx="20" cy="10" rx="6" ry="9" transform="rotate(216 20 20)"/><ellipse cx="20" cy="10" rx="6" ry="9" transform="rotate(288 20 20)"/></g><circle cx="20" cy="20" r="4.5" fill="#d9b36f"/></symbol>
+</svg>
+
+<div id="floaters"></div>
+
+<!-- ============ 1. OPENING SCREEN ============ -->
+<div id="gate">
+  <svg class="corner" style="top:14px;left:14px;transform:rotate(-18deg)" aria-hidden="true"><use href="#bow"/></svg>
+  <svg class="corner" style="bottom:14px;right:14px;transform:rotate(162deg)" aria-hidden="true"><use href="#bow"/></svg>
+  <div class="gdeco" style="top:18%;left:7%;transform:rotate(-12deg)" aria-hidden="true"><svg class="ic" viewBox="0 0 60 90" width="34"><use href="#lipstick"/></svg></div>
+  <div class="gdeco" style="top:20%;right:7%;transform:rotate(12deg)" aria-hidden="true"><svg class="ic" viewBox="0 0 60 90" width="34"><use href="#perfume"/></svg></div>
+  <svg class="gift" viewBox="0 0 200 190" aria-hidden="true">
+    <ellipse class="glow" cx="100" cy="80" rx="62" ry="30" fill="#f6d9a0"/>
+    <rect x="30" y="85" width="140" height="95" rx="8" fill="#f2b8c1"/>
+    <rect x="92" y="85" width="16" height="95" fill="#b3283f"/>
+    <g class="lid"><rect x="22" y="60" width="156" height="32" rx="8" fill="#e8a0ac"/><rect x="92" y="60" width="16" height="32" fill="#b3283f"/><use href="#bow" x="52" y="10" width="96" height="58" style="color:#b3283f"/></g>
+  </svg>
+  <div class="pearls" aria-hidden="true"></div>
+  <h1>Psst... it's your birthday 🎀</h1>
+  <p>Unfortunately for you, your sister has been planning something.</p>
+  <button class="btn" id="openBtn">Fine, show me ♡</button>
+</div>
+
+<main id="main">
+
+<!-- ============ 2. COVER ============ -->
+<section id="hero">
+  <div class="cover">
+    <div class="issue"><span id="issueL"></span><span>No. 01</span></div>
+    <div class="mast" id="mast"></div>
+    <div class="edition" id="edition"></div>
+    <div class="stage">
+      <svg class="ic pr" style="left:0;top:8%;width:15%;transform:rotate(-14deg)" viewBox="0 0 60 90" aria-hidden="true"><use href="#lipstick"/></svg>
+      <svg class="ic pr" style="right:0;top:6%;width:15%;transform:rotate(12deg)" viewBox="0 0 60 90" aria-hidden="true"><use href="#perfume"/></svg>
+      <svg class="ic pr" style="right:15%;bottom:2%;width:11%;transform:rotate(8deg)" viewBox="0 0 60 90" aria-hidden="true"><use href="#gloss"/></svg>
+      <svg class="ic pr" style="left:16%;bottom:0;width:12%;transform:rotate(-6deg)" viewBox="0 0 60 90" aria-hidden="true"><use href="#serum"/></svg>
+      <div id="cake1"></div>
+    </div>
+    <h1><i>Happy birthday,</i>Loser <span>♡</span></h1>
+    <span class="tag">Another year older. Still my problem.</span>
+    <div class="pearls" aria-hidden="true"></div>
+    <div id="coverLines" style="display:grid;gap:.15rem;font-family:var(--hand);font-size:1.25rem;color:var(--wine)"></div>
+    <span class="barcode" aria-hidden="true"></span>
+  </div>
+  <div class="hint">(Tap the cake. Blow out the candles. Make a wish. Keep it to yourself.)</div>
+</section>
+
+<!-- ============ 3. AWARDS ============ -->
+<section id="roast">
+  <h2>Things I unfortunately have to put up with</h2>
+  <div class="sub">Tap each award to read the fine print</div>
+  <div class="grid" id="roastGrid"></div>
+</section>
+
+<!-- ============ 4. LETTER ============ -->
+<section id="letter">
+  <h2>A note tucked into your beauty journal</h2>
+  <div class="sub">Tap the envelope. It won't bite.</div>
+  <button class="env" id="env" aria-expanded="false" aria-label="Open the letter"><span class="flap"></span><span class="wax">♡</span></button>
+  <div class="wrap" id="wrap"><div><div class="journal"><div class="paper" id="paper"></div></div></div></div>
+</section>
+
+<!-- ============ 5. ILLUSTRATED SCRAPBOOK ============ -->
+<section id="scrap">
+  <h2>Exhibits from the Umama archive</h2>
+  <div class="sub">Collected over years. Reluctantly.</div>
+  <div class="scr" id="scr"></div>
+</section>
+
+<!-- ============ 6. BEAUTY EMERGENCY KIT ============ -->
+<section id="kit">
+  <h2 id="kitTitle"></h2>
+  <div class="sub">Break glass. Or just tap. Tap is fine.</div>
+  <div class="bag"><div class="bag-in" id="kitItems"></div></div>
+</section>
+
+<!-- ============ 7. FINAL PAGE ============ -->
+<section id="final">
+  <div class="page">
+    <div class="pearls" aria-hidden="true"></div>
+    <div id="cake2"></div>
+    <p class="big">Anyway, happy birthday. You're stuck with me forever. Skill issue ♡</p>
+    <p class="small">Made with love, questionable amounts of CSS, and an unreasonable amount of sibling tolerance.</p>
+    <button class="btn" id="confBtn">Do not press (press it)</button>
+    <p class="ps">Tuition fees are expensive, so you better appreciate this.</p>
+  </div>
+</section>
+<footer></footer>
+</main>
+
+<script>
+/* =====================================================================
+   ✏️  EDIT EVERYTHING HERE. You never need to touch the code below.
+   Keep the "quote marks" and commas exactly as they are.
+   ===================================================================== */
+const CONFIG = {
+  // ✏️ Her name (used on the magazine cover and in the kit title)
+  herName: "Umama",
+
+  // ✏️ Magazine cover text
+  edition: "The Birthday Issue",
+  coverLines: [
+    "Inside: the five-step routine (minimum)",
+    "Exclusive: why we're always late",
+    "Tested on one sister. She was annoyed."
+  ],
+
+  // ✏️ AWARD CARDS: title on the front, roast on the back. Add or remove freely.
+  awards: [
+    { title: "CEO of Buying More Skincare", roast: "Her shelf has more active ingredients than my entire education. I'm not jealous. I'm just borrowing the serum." },
+    { title: "Five-Step Routine (Minimum)", roast: "Cleanser, toner, serum, moisturiser, and a quiet moment of judging me. Steps six to nine are classified." },
+    { title: "Prettiest Girl With the Most Attitude", roast: "The face card is valid. The attitude arrives separately, and always on time." },
+    { title: "My Personal Beauty Influencer", roast: "Has never posted a tutorial, yet I've bought three products because she said 'it's absolutely crucial for my skin'." },
+    { title: "CEO of Taking Forever to Get Ready", roast: "'Five minutes' is a unit of time that only exists in her world. We left late. Again." },
+    { title: "Unfortunately, My Favourite Little Sister", roast: "Please don't make me say it twice. I won't. I have a reputation." }
+  ],
+
+  // ✏️ LETTER: each line is one paragraph. Edit the [bracket] line with a real memory or inside joke.
+  letter: [
+    "Happy birthday, idiot. ♡",
+
+  "I was going to write something really emotional, but unfortunately, you know me too well for me to get away with that.",
+
+  "First of all, I hope you realise how lucky you are to have me as your older sister. And how lucky I am to have you, even though I would never admit that without being forced to.",
+
+  "Thank you for being my personal photographer, because apparently I cannot take a single decent picture without your professional supervision. My personal makeup artist, because who else am I supposed to trust with my face? And my skincare advisor, because at this point, my skincare routine is basically managed by you. I'm starting to think I should be paying you a salary.",
+
+  "Honestly, who else would take approximately 847 pictures of me just to approve three? Who would tell me which products I need, despite my wallet never agreeing? Who would make sure I look good and then have the audacity to look prettier than me herself?",
+
+  "Rude, actually.",
+
+  "But jokes aside, I'm genuinely so grateful to have you as my little sister, even when you're being annoying for absolutely no reason.",
+
+  "I hope this new year of your life brings you so much happiness, beautiful memories, good health, success, and all the pretty little things you've been wishing for. I hope you get to experience the kind of happiness that makes you forget to check your phone, the kind of days you wish would never end, and the kind of memories you'll keep smiling about for years.",
+
+  "And obviously, I hope your skin stays clear, your makeup always blends perfectly, your favourite products never get discontinued, and you never run out of storage for all the pictures you take.",
+
+  "Love you. Don't let it get to your head, though. You already have enough attitude.",
+
+  "Happy birthday, my beautiful sister. ♡",
+
+  "P.S. Your photography, makeup, and skincare services will continue to be required. Unfortunately, your contract as my little sister is lifelong and non-negotiable.",
+  ],
+  signoff: "- Your favourite older sister (the title is permanent, sorry.) ♡",
+
+  // ✏️ SCRAPBOOK captions (6 pieces, each with a small label)
+  scrap: [
+    { caption: "Her skincare routine costs more than my peace.", label: "Net cost: my sanity" },
+    { caption: "Just one more lip gloss. Sure.", label: "Par avion" },
+    { caption: "The beauty guru of this household.", label: "Certified" },
+    { caption: "She has a product for everything.", label: "No refunds" },
+    { caption: "Main character energy, questionable spending habits.", label: "SPF: attitude" },
+    { caption: "Prettier than me and she knows it. Unfortunately.", label: "Facts only" }
+  ],
+
+  // ✏️ BEAUTY EMERGENCY KIT: tap an item to reveal its message
+  kitTitle: "Umama's Beauty Emergency Kit",
+  kit: [
+    { icon: "gloss",  name: "Lip gloss", msg: "For emergencies, bad moods, and absolutely no occasion whatsoever." },
+    { icon: "serum",  name: "Serum", msg: "May your skin glow and your problems mind their own business." },
+    { icon: "mirror", name: "Compact mirror", msg: "For the days you forget who's the prettiest in the room. Humility is also important. Briefly." },
+    { icon: "perfume",name: "Perfume", msg: "Smelling expensive is a personality trait in this family now. You started it." }
+  ]
+};
+/* ===================== END OF THINGS TO EDIT ===================== */
+
+const $ = s => document.querySelector(s);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const bowSvg = (st='') => `<svg class="bow" style="${st}" viewBox="0 0 100 60" aria-hidden="true"><use href="#bow"/></svg>`;
+const ic = (n, w, st='') => `<svg class="ic" viewBox="0 0 60 90" style="width:${w}px;${st}" aria-hidden="true"><use href="#${n}"/></svg>`;
+const centre = el => { const r = el.getBoundingClientRect(); return [r.left + r.width/2, r.top + r.height/2]; };
+
+/* floating decorations */
+(function(){
+  if (reduce) return;
+  const box = $('#floaters'), bits = ['bow','♡','lipstick','✦','gloss','bow','♡','perfume'];
+  bits.concat(bits).forEach((t,i) => {
+    const e = document.createElement('div'), sz = 14 + Math.random()*14;
+    e.className = 'fl';
+    e.style.cssText = `left:${Math.random()*95}%;font-size:${sz}px;animation-duration:${16+Math.random()*14}s;animation-delay:${-Math.random()*22}s`;
+    e.innerHTML = t === 'bow' ? bowSvg(`width:${sz*1.5}px;height:${sz*.9}px`) : ['♡','✦'].includes(t) ? t : ic(t, sz*1.1, 'opacity:.7');
+    box.appendChild(e);
+  });
+})();
+
+/* confetti */
+function burst(x, y, n){
+  n = reduce ? 10 : (n || 34);
+  const cols = ['#d48a96','#d9b36f','#b3283f','#f7dde0','#6e1f33'], shapes = ['♡','✦','●','bow'];
+  for (let i = 0; i < n; i++){
+    const e = document.createElement('div'), s = shapes[i % 4], sz = 12 + Math.random()*14;
+    e.className = 'conf'; e.style.cssText = `font-size:${sz}px;color:${cols[i%cols.length]}`;
+    e.innerHTML = s === 'bow' ? bowSvg(`width:${sz*1.5}px;height:${sz*.9}px`) : s;
+    document.body.appendChild(e);
+    const a = Math.random()*Math.PI*2, d = 90 + Math.random()*170, dx = Math.cos(a)*d, dy = Math.sin(a)*d - 60;
+    e.animate([
+      {transform:`translate(${x}px,${y}px) rotate(0) scale(.4)`,opacity:1},
+      {transform:`translate(${x+dx}px,${y+dy}px) rotate(${Math.random()*360}deg) scale(1)`,opacity:1,offset:.45},
+      {transform:`translate(${x+dx*1.2}px,${y+dy+180}px) rotate(${Math.random()*540}deg) scale(.9)`,opacity:0}
+    ],{duration:(reduce?500:1700+Math.random()*900),easing:'cubic-bezier(.2,.7,.4,1)'}).onfinish = () => e.remove();
+  }
+}
+
+/* cake: tap or press Enter/Space to blow out and relight */
+function cake(host){
+  let d = '';
+  for (let i = 0; i < 6; i++) d += `<circle cx="${40+i*24}" cy="122" r="7" fill="#fcf6ee"/>`;
+  for (let i = 0; i < 5; i++) d += `<circle cx="${60+i*20}" cy="88" r="6" fill="#f6c9d0"/>`;
+  for (let i = 0; i < 4; i++) d += `<circle cx="${79+i*14}" cy="58" r="5" fill="#fcf6ee"/>`;
+  host.innerHTML = `<svg class="cake" viewBox="0 0 200 200" role="button" tabindex="0" aria-label="Birthday cake. Tap to blow out the candles.">
+  <ellipse cx="100" cy="182" rx="88" ry="10" fill="#e8c6a8" opacity=".6"/>
+  <rect x="28" y="120" width="144" height="58" rx="10" fill="#f6c9d0"/><rect x="48" y="86" width="104" height="38" rx="8" fill="#fcf6ee" stroke="#ecc3ca"/><rect x="68" y="56" width="64" height="34" rx="8" fill="#f6c9d0"/>${d}
+  <path d="M28 152q18 12 36 0t36 0 36 0 36 0" fill="none" stroke="#b3283f" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round"/>
+  ${[84,100,116].map(x=>`<rect x="${x-2.5}" y="34" width="5" height="22" rx="2" fill="#d9b36f"/><ellipse class="flame" cx="${x}" cy="28" rx="4" ry="7" fill="#f6b73c"/>`).join('')}
+  <use href="#bow" x="82" y="128" width="36" height="22" style="color:#b3283f"/></svg>`;
+  const s = host.firstElementChild;
+  const tog = () => { s.classList.toggle('out'); if (s.classList.contains('out')){ const[x,y]=centre(s); burst(x,y-40,18); } };
+  s.onclick = tog; s.onkeydown = e => { if (e.key==='Enter'||e.key===' '){ e.preventDefault(); tog(); } };
+}
+
+/* ---- build content ---- */
+document.querySelectorAll('.pearls').forEach(p => p.setAttribute('role','presentation'));
+$('#mast').textContent = CONFIG.herName;
+$('#issueL').textContent = CONFIG.herName + "'s Beauty Diary";
+$('#edition').textContent = CONFIG.edition;
+$('#coverLines').innerHTML = CONFIG.coverLines.map(l => `<span>✦ ${esc(l)}</span>`).join('');
+$('#kitTitle').textContent = CONFIG.kitTitle;
+cake($('#cake1')); cake($('#cake2'));
+
+const icons = ['jar','gloss','serum','lipstick','mirror','perfume','palette'];
+$('#roastGrid').innerHTML = CONFIG.awards.map((a,i) => `<div class="card"><button class="in" aria-pressed="false" aria-label="Award: ${esc(a.title)}. Tap to flip.">
+  <span class="face front"><small>Official award</small>${ic(icons[i%icons.length],38)}<b>${esc(a.title)}</b><span class="tap">Tap to read</span><span class="seal">✦</span></span>
+  <span class="face back"><span>${esc(a.roast)}<em>- Signed, your older sister</em></span></span></button></div>`).join('');
+document.querySelectorAll('.card').forEach(c => c.onclick = () => {
+  c.classList.toggle('flip'); c.firstElementChild.setAttribute('aria-pressed', c.classList.contains('flip'));
+});
+
+$('#paper').innerHTML = `<span class="flowers" aria-hidden="true"><svg class="ic" viewBox="0 0 40 40" width="26"><use href="#flower"/></svg><svg class="ic" viewBox="0 0 40 40" width="18"><use href="#flower"/></svg></span>`
+  + CONFIG.letter.map(p => `<p>${esc(p)}</p>`).join('') + `<p class="sig">${esc(CONFIG.signoff)}</p>`;
+$('#env').onclick = function(){
+  const o = this.classList.toggle('open'); $('#wrap').classList.toggle('open', o); this.setAttribute('aria-expanded', o);
+  if (o){ const[x,y]=centre(this); burst(x,y,14); setTimeout(()=>$('#paper').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}),500); }
+};
+
+/* illustrated scrapbook: six different layouts */
+const S = CONFIG.scrap, cp = i => `<p class="cap">${esc(S[i].caption)}</p>`, lb = i => `<span class="lab">${esc(S[i].label)}</span>`;
+const fl = (st) => `<svg class="sticker ic" style="${st}" viewBox="0 0 40 40" aria-hidden="true"><use href="#flower"/></svg>`;
+$('#scr').innerHTML = [
+  `<div class="sc a"><span class="tape"></span><div class="row">${ic('jar',50)}${ic('serum',58)}${ic('jar',44)}${ic('serum',50)}</div>${cp(0)}${lb(0)}</div>`,
+  `<div class="sc b"><div class="row">${ic('gloss',44)}${ic('gloss',34,'transform:rotate(14deg)')}</div>${cp(1)}${lb(1)}</div>`,
+  `<div class="sc c"><span class="tape"></span><div class="frame">${ic('mirror',70,'margin:0 auto')}</div>${cp(2)}${lb(2)}${fl('right:-8px;bottom:30px;transform:scale(1.3)')}</div>`,
+  `<div class="sc d"><p><span>Serum x3</span><span>yes</span></p><p><span>Other serum</span><span>also yes</span></p><p><span>"Last" gloss x7</span><span>sure</span></p><p><span>Total</span><span>don't ask</span></p><div class="row" style="margin-top:.6rem">${ic('perfume',34)}</div>${cp(3)}${lb(3)}</div>`,
+  `<div class="sc e">${ic('lipstick',44)}${cp(4)}${lb(4)}</div>`,
+  `<div class="sc f"><span class="tape"></span><div class="row">${ic('palette',54)}${bowSvg('width:56px;height:34px;color:#b3283f;align-self:center')}${ic('lipstick',40)}</div>${cp(5)}${lb(5)}</div>`
+].join('');
+
+$('#kitItems').innerHTML = CONFIG.kit.map(k => `<div><button class="gbtn" aria-expanded="false">${ic(k.icon,52)}<span>${esc(k.name)}</span></button><div class="note"><div><p>${esc(k.msg)}</p></div></div></div>`).join('');
+document.querySelectorAll('.gbtn').forEach(b => b.onclick = function(){
+  const o = this.nextElementSibling.classList.toggle('open'); this.setAttribute('aria-expanded', o);
+  if (o){ const[x,y]=centre(this); burst(x,y,14); }
+});
+
+$('#confBtn').onclick = function(){
+  const[x,y]=centre(this); burst(x,y,50); setTimeout(()=>burst(innerWidth*.25,innerHeight*.4,30),250); setTimeout(()=>burst(innerWidth*.75,innerHeight*.4,30),450);
+  this.textContent = 'You pressed it. Incredible. Again?';
+};
+
+/* open the gift */
+$('#openBtn').onclick = function(){
+  const g = $('#gate'); g.classList.add('open'); this.disabled = true;
+  const[x,y]=centre($('.gift')); burst(x,y-30,36);
+  setTimeout(()=>{ $('#main').classList.add('show'); requestAnimationFrame(()=>requestAnimationFrame(()=>$('#main').classList.add('vis'))); g.classList.add('gone'); window.scrollTo(0,0); }, reduce?100:1100);
+  setTimeout(()=>g.remove(), 2200);
+};
+</script>
+</body>
+</html>
